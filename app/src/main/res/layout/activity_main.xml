@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+   <EditText
+       android:id="@+id/api_key_edit"
+       android:layout_width="match_parent"
+       android:layout_height="50dp"
+       android:gravity="center"
+       android:hint="Api key"
+       android:textColor="@color/colorBackground"
+       android:textColorHint="@color/colorBackground"
+       app:layout_constraintBottom_toBottomOf="parent"
+       app:layout_constraintTop_toTopOf="parent"
+       android:layout_marginStart="20dp"
+       android:layout_marginEnd="60dp"
+      />
+   <ImageButton
+       android:id="@+id/api_key_browser"
+       android:layout_width="50dp"
+       android:layout_height="50dp"
+       android:background="@drawable/round_style"
+       android:src="@drawable/ic__key"
+       app:layout_constraintTop_toTopOf="@+id/api_key_edit"
+       app:layout_constraintStart_toEndOf="@+id/api_key_edit"
+
+       />
+   <Button
+       android:id="@+id/key_enter"
+       android:layout_width="200dp"
+       android:layout_height="50dp"
+       android:background="@drawable/round_style"
+       android:text="Enter"
+       android:textColor="@color/colorWhite"
+       app:layout_constraintEnd_toEndOf="parent"
+       android:layout_marginTop="60dp"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintTop_toBottomOf="@+id/api_key_edit" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
