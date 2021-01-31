@@ -25,6 +25,9 @@ android {
     compileOptions {
         sourceCompatibility kotlin_version
         targetCompatibility kotlin_version
+
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
     dependenciesInfo {
         includeInApk true
@@ -60,8 +63,6 @@ dependencies {
     implementation 'androidx.navigation:navigation-ui-ktx:2.3.3'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
-
-
-
+    implementation group: 'ru.sms-activate', name: 'SMSActivateApi', version: '1.0'
 
 }
