@@ -8,12 +8,16 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import okhttp3.internal.notify
 import ru.startandroid.onlinesim.R
 import ru.startandroid.onlinesim.activity.activationsActivity.ActiveActivations
+import ru.startandroid.onlinesim.auth.User
+import java.util.ArrayList
 
-class SelectionAdapter(var selection: ArrayList<String> , This:Context): RecyclerView.Adapter<SelectionAdapter.ViewHolder>(){
+class SelectionAdapter(var selection: List<User.Info>, This:Context): RecyclerView.Adapter<SelectionAdapter.ViewHolder>(){
 
     private var context=This
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
      val view:View = LayoutInflater.from(parent.context).inflate(R.layout.services_layout,parent,false)
         return ViewHolder(
@@ -21,15 +25,14 @@ class SelectionAdapter(var selection: ArrayList<String> , This:Context): Recycle
         )
     }
 
-    override fun getItemCount() =selection.size
+    override fun getItemCount() = selection.size
     class ViewHolder(itemView: View):RecyclerView.ViewHolder(itemView){
         val servicesText:TextView = itemView.findViewById(R.id.name_services)
         val buyServices:ImageButton = itemView.findViewById(R.id.buy_services)
 
     }
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.servicesText.text = selection[position]
-
+        holder.servicesText.text = selection[position].Name
         holder.buyServices.setOnClickListener{
             val intent = Intent(context, ActiveActivations::class.java)
             startActivity(intent)

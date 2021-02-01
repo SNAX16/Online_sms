@@ -3,7 +3,7 @@ package ru.startandroid.onlinesim
 import org.junit.Test
 
 import org.junit.Assert.*
-import ru.sms_activate.SMSActivateApi
+import ru.startandroid.onlinesim.activity.data.GetCountry
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -17,12 +17,11 @@ class ExampleUnitTest {
     }
 
 
-
     @Test
-    fun one(){
-        val smsActivateApi = SMSActivateApi("76752bd99858d2A9b2bAd634cA490895")
-          println("${smsActivateApi.balance}")
-        //println("${smsActivateApi.countries}")
+    fun one() {
+       val country= GetCountry("6863f0555d45c62d137A8b6e3c19d64f")
 
+        println(country.longRunningMethod())
     }
-}
+
+   }
