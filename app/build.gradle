@@ -64,5 +64,9 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     implementation group: 'ru.sms-activate', name: 'SMSActivateApi', version: '1.0'
+    //Add lib Okhttp
+    implementation("com.squareup.okhttp3:okhttp:4.9.0")
+    //Add lib moshi
+    implementation("com.squareup.moshi:moshi:1.11.0")
 
 }

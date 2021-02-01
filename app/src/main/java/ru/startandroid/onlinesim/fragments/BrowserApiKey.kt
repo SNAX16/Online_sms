@@ -6,11 +6,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toolbar
 import androidx.annotation.RequiresApi
 import kotlinx.android.synthetic.main.fragment_browser_api_key.*
-import kotlinx.android.synthetic.main.fragment_valid_api_key.*
-import ru.startandroid.onlinesim.MainActivity
 import ru.startandroid.onlinesim.R
 
 class BrowserApiKey : Fragment() {

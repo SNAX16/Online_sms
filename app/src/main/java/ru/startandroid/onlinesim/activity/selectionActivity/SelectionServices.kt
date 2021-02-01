@@ -1,10 +1,13 @@
-package ru.startandroid.onlinesim
+package ru.startandroid.onlinesim.activity.selectionActivity
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_selection_services.*
+import ru.startandroid.onlinesim.R
+import ru.startandroid.onlinesim.activity.activationsActivity.ActiveActivations
 import java.util.*
 
 
@@ -24,14 +27,11 @@ class SelectionServices : AppCompatActivity() {
         }
 
         recyclerView_s_s.layoutManager = LinearLayoutManager(this)
-        recyclerView_s_s.adapter = SelectionAdapter(selection)
+        recyclerView_s_s.adapter = SelectionAdapter(selection,this)
 
         val adapter= ArrayAdapter(this,android.R.layout.simple_spinner_item,selection1)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinner_s_s.adapter = adapter
-
-
-
 
     }
 }

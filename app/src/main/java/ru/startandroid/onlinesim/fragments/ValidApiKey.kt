@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.fragment_valid_api_key.*
-import ru.startandroid.onlinesim.MainActivity
 import ru.startandroid.onlinesim.R
 
 
