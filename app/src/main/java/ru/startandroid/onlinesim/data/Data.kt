@@ -9,4 +9,8 @@ class Data {
 
     data class ServicePrices(val Id: String, val count: @NotNull BigDecimal, val price: Int)
 
+    data class AccountBalance(val balance: @NotNull BigDecimal)
+
+    data class NumberPhone(val activation: Int, val numberPhone: Long, val service:String)
+
 }

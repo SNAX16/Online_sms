@@ -21,16 +21,25 @@ class SelectionServicesViewModel(application: Application) : AndroidViewModel(ap
     }
 
     private fun onStart() {
+        getCountry()
+        getPrice(0)
+
+    }
+
+    fun getPrice(idCountru: Int) {
+        GlobalScope.launch(Dispatchers.IO) {
+            val country = ApiAdapter(User.apyKey)
+
+            liveDataPrice.postValue(country.getServicePrices(idCountru))
+        }
+
+    }
+
+    fun getCountry() {
         GlobalScope.launch(Dispatchers.IO) {
             val country = ApiAdapter(User.apyKey)
 
             liveDataCountry.postValue(country.getCountry())
-        }
-
-        GlobalScope.launch(Dispatchers.IO) {
-            val country = ApiAdapter(User.apyKey)
-
-            liveDataPrice.postValue(country.getServicePrices(0))
         }
 
     }

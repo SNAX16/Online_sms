@@ -5,19 +5,18 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.TextView
+import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import ru.startandroid.onlinesim.R
 import ru.startandroid.onlinesim.activity.activationsActivity.ActiveActivations
 import ru.startandroid.onlinesim.data.Data
 
-class SelectionAdapter(var selection: List<Data.ServicePrices>, This:Context): RecyclerView.Adapter<SelectionAdapter.ViewHolder>(){
+class SelectionAdapter(selection: List<Data.ServicePrices>, This:Context,spinner:Spinner): RecyclerView.Adapter<SelectionAdapter.ViewHolder>(){
 
     private var context=This
     private var sel = selection
+    private var spineerPosition =spinner
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
      val view:View = LayoutInflater.from(parent.context).inflate(R.layout.services_layout,parent,false)
@@ -36,6 +35,14 @@ class SelectionAdapter(var selection: List<Data.ServicePrices>, This:Context): R
 
     }
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        var sp:Int = 0
+        spineerPosition.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                sp = position
+            }
+
+            override fun onNothingSelected(arg0: AdapterView<*>?) {}
+        }
 
         Glide
             .with(context)
@@ -46,7 +53,11 @@ class SelectionAdapter(var selection: List<Data.ServicePrices>, This:Context): R
         holder.priceServicesText.text = sel[position].count.toString()+"Р"?:"000"
         holder.buyServices.setOnClickListener{
             val intent = Intent(context, ActiveActivations::class.java)
+            intent.putExtra("services",sel[position].Id)
+            intent.putExtra("img","https://sms-activate.ru/assets/ico/${sel[position].Id}0.png")
+            intent.putExtra("idCountry",sp)
             startActivity(intent)
+
         }
     }
 

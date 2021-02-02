@@ -5,7 +5,6 @@ import ru.sms_activate.response.api_activation.extra.SMSActivateCountryInfo
 import java.util.ArrayList
 
 class ApiAdapter(apiKey: String) : SMSActivateApi(apiKey) {
-    private val list: ArrayList<Data.Country> = ArrayList()
     private val listCountry: ArrayList<String> = ArrayList()
     private val listServicePrices: ArrayList<Data.ServicePrices> = ArrayList()
 
@@ -13,7 +12,7 @@ class ApiAdapter(apiKey: String) : SMSActivateApi(apiKey) {
         val country: MutableList<SMSActivateCountryInfo> = countries.smsActivateGetCountryInfoList
 
         country.forEach {
-            listCountry.add("${it.id}  ${it.russianName}")
+            listCountry.add("ID:${it.id}   ${it.russianName}")
         }
         return listCountry
     }
@@ -26,5 +25,16 @@ class ApiAdapter(apiKey: String) : SMSActivateApi(apiKey) {
        }
 
         return listServicePrices
+    }
+
+    fun getAccountBalance(): Data.AccountBalance {
+        val accountBalance= balance
+        return Data.AccountBalance(accountBalance)
+    }
+
+
+    fun getNumberPhone(idCountry: Int,nameService:String): Data.NumberPhone {
+        val numberPhone = getNumber(idCountry,nameService)
+        return  Data.NumberPhone(numberPhone.id,numberPhone.number,numberPhone.shortName)
     }
 }
