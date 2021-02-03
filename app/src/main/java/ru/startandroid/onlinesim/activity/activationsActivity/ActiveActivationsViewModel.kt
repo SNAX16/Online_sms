@@ -1,22 +1,28 @@
 package ru.startandroid.onlinesim.activity.activationsActivity
 
 import android.app.Application
-import android.content.Intent
+import android.content.Context
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import ru.startandroid.onlinesim.auth.User
 import ru.startandroid.onlinesim.data.ApiAdapter
 import ru.startandroid.onlinesim.data.Data
-import java.util.ArrayList
+import ru.startandroid.onlinesim.model.database.DataBaseHelperImpl
+import ru.startandroid.onlinesim.model.database.DatabaseBuilder
+import ru.startandroid.onlinesim.model.entity.LiveActivations
+import java.util.*
 
 class ActiveActivationsViewModel(application: Application) : AndroidViewModel(application) {
 
     val liveDataBalance = MutableLiveData<Data.AccountBalance>()
     val liveData = MutableLiveData<ArrayList<String>>()
-    val liveDataPhoneNamber = MutableLiveData<Data.NumberPhone>()
+    val liveDataPhoneNamber = MutableLiveData<ArrayList<String>>()
+    val liveDatainter = MutableLiveData<List<LiveActivations>>()
+    val app = application
 
     init {
         onStart()
@@ -31,12 +37,7 @@ class ActiveActivationsViewModel(application: Application) : AndroidViewModel(ap
 
          liveData.value = selection
         getBalance()
-
-
-        //getPhoneNumber()
-
-
-
+        getlive()
     }
 
     fun getBalance() {
@@ -44,14 +45,13 @@ class ActiveActivationsViewModel(application: Application) : AndroidViewModel(ap
             val balance = ApiAdapter(User.apyKey)
             liveDataBalance.postValue(balance.getAccountBalance())
         }
-
     }
 
-    fun getPhoneNumber(intent:Intent) {
+    fun getlive() {
         GlobalScope.launch(Dispatchers.IO) {
-            val phoneNumber = ApiAdapter(User.apyKey)
-            liveDataPhoneNamber.postValue(phoneNumber.getNumberPhone(intent.getStringExtra("idCountry").toInt(),intent.getStringExtra("services")))
+            val db = DataBaseHelperImpl(DatabaseBuilder.getInstance(app.applicationContext))
+            liveDatainter.postValue(db.getAll())
         }
-
     }
 }
+

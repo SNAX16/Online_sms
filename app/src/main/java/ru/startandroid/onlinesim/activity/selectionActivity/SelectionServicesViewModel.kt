@@ -1,8 +1,7 @@
 package ru.startandroid.onlinesim.activity.selectionActivity
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -11,8 +10,8 @@ import ru.startandroid.onlinesim.data.ApiAdapter
 import ru.startandroid.onlinesim.data.Data
 import java.util.*
 
-class SelectionServicesViewModel(application: Application) : AndroidViewModel(application) {
-
+class SelectionServicesViewModel() : ViewModel() {
+    val apiAdapter = ApiAdapter(User.apyKey)
     val liveDataPrice = MutableLiveData<ArrayList<Data.ServicePrices>>()
     val liveDataCountry = MutableLiveData<MutableList<String>>()
 
@@ -26,22 +25,20 @@ class SelectionServicesViewModel(application: Application) : AndroidViewModel(ap
 
     }
 
-    fun getPrice(idCountru: Int) {
+    fun getPrice(idCountry: Int) {
         GlobalScope.launch(Dispatchers.IO) {
-            val country = ApiAdapter(User.apyKey)
-
-            liveDataPrice.postValue(country.getServicePrices(idCountru))
+            liveDataPrice.postValue(apiAdapter.getServicePrices(idCountry))
         }
 
     }
 
     fun getCountry() {
         GlobalScope.launch(Dispatchers.IO) {
-            val country = ApiAdapter(User.apyKey)
-
-            liveDataCountry.postValue(country.getCountry())
+            liveDataCountry.postValue(apiAdapter.getCountry())
         }
-
     }
 
+    fun getPhoneNumber(idCountry:Int,services:String): Data.NumberPhone {
+        return apiAdapter.getNumberPhone(idCountry,services)
+    }
 }

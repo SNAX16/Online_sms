@@ -5,6 +5,7 @@ import org.junit.Test
 import org.junit.Assert.*
 import ru.startandroid.onlinesim.auth.User
 import ru.startandroid.onlinesim.data.ApiAdapter
+import ru.startandroid.onlinesim.data.Data
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -20,11 +21,9 @@ class ExampleUnitTest {
 
     @Test
     fun one() {
-        val country = ApiAdapter("6863f0555d45c62d137A8b6e3c19d64f")
-//        val sdfsdf= country.allPrices.countryIdSet
-//        val servicePrices= country.allPrices.getSmsActivateGetPriceMap(0)
-        println(country.getServicePrices(1))
-
+        val apiAdapter = ApiAdapter(User.apyKey)
+        val numberPhone =apiAdapter.getNumber(0,"vk")
+        println(numberPhone)
     }
 
 }
