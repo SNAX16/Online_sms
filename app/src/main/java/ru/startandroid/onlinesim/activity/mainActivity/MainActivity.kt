@@ -1,46 +1,49 @@
 package ru.startandroid.onlinesim.activity.mainActivity
 
-import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.activity_main.*
+import ru.sms_activate.error.wrong_parameter.SMSActivateWrongParameter
+import ru.sms_activate.error.wrong_parameter.SMSActivateWrongParameter.*
 import ru.startandroid.onlinesim.R
 import ru.startandroid.onlinesim.activity.selectionActivity.SelectionServices
+import ru.startandroid.onlinesim.auth.User
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var prefs: SharedPreferences
-    var apiKey:String = "ApiKey"
-
+    lateinit var mainViewModel: MainActivityViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
     }
 
     override fun onStart() {
         super.onStart()
-
-        prefs = getSharedPreferences("settings", Context.MODE_PRIVATE)
-
+        mainViewModel = ViewModelProvider(this).get(MainActivityViewModel::class.java)
         api_key_browser.setOnClickListener{
             val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://sms-activate.ru/ru"))
             startActivity(browserIntent)
         }
 
-        key_enter.setOnClickListener{
-            val intent = Intent(this, SelectionServices::class.java)
-            startActivity(intent)
+        key_enter.setOnClickListener {
+            if (api_key_edit.text.length == 32) {
+                User.apyKey = api_key_edit.text.toString()
+                User.isAuthorized = true
 
+                 val intent = Intent(this, SelectionServices::class.java)
+                 startActivity(intent)
+                 finish()
+
+            } else {
+                Toast.makeText(this, "неверный Api ключ", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
     override fun onStop() {
         super.onStop()
-        val editor = prefs.edit()
-        val text = api_key_edit.text
-        editor.putString(apiKey, text.toString()).apply()
     }
 }

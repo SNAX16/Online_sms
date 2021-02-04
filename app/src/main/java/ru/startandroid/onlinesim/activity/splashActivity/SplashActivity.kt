@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import android.widget.Toast
 import ru.startandroid.onlinesim.activity.mainActivity.MainActivity
+import ru.startandroid.onlinesim.auth.User
 import ru.startandroid.onlinesim.internet.ConnectionInternet
 
 class SplashActivity : AppCompatActivity() {
@@ -22,8 +23,7 @@ class SplashActivity : AppCompatActivity() {
                 val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
                 finish()
-
-        } else {
+            } else {
             Toast.makeText(this, "Проблемы с интернет соединением", Toast.LENGTH_SHORT).show()
         }
 

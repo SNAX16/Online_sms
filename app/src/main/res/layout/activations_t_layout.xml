@@ -21,7 +21,7 @@
         <TableRow>
                     <TextView
                         android:layout_width="wrap_content"
-                        android:layout_height="20dp"
+                        android:layout_height="match_parent"
                         android:layout_marginStart="4dp"
                         android:layout_marginEnd="4dp"
                         android:gravity="center"
@@ -30,27 +30,25 @@
 
                     <TextView
                         android:layout_width="wrap_content"
-                        android:layout_height="20dp"
+                        android:layout_height="match_parent"
                         android:layout_marginStart="4dp"
                         android:layout_marginEnd="4dp"
-                        android:layout_weight="1"
                         android:gravity="center"
                         android:text="Сервис"
                         android:textSize="10dp" />
 
                     <TextView
                         android:layout_width="wrap_content"
-                        android:layout_height="20dp"
+                        android:layout_height="match_parent"
                         android:layout_marginStart="4dp"
                         android:layout_marginEnd="4dp"
-                        android:layout_weight="1"
                         android:gravity="center"
                         android:text="Страна"
                         android:textSize="10dp" />
 
                     <TextView
                         android:layout_width="wrap_content"
-                        android:layout_height="20dp"
+                        android:layout_height="match_parent"
                         android:layout_marginStart="4dp"
                         android:layout_marginEnd="4dp"
                         android:gravity="center"
@@ -61,36 +59,36 @@
 
                     <TextView
                         android:layout_width="wrap_content"
-                        android:layout_height="20dp"
+                        android:layout_height="match_parent"
                         android:layout_marginStart="4dp"
                         android:layout_marginEnd="4dp"
                         android:gravity="center"
                         android:layout_weight="1"
-                        android:text="Код из смс"
+                        android:text="СМС"
                         android:textSize="10dp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="20dp"
+            <ImageButton
+                android:id="@+id/accept_button"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:layout_marginStart="4dp"
                 android:layout_marginEnd="4dp"
-                android:gravity="center"
-                android:text="ОК"
-                android:textSize="10dp" />
-
+                android:background="@drawable/round_style"
+                android:src="@drawable/ic_done" />
         </TableRow>
 
 
         <TableRow>
-        <TextView
-            android:id="@+id/id_activation"
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:layout_marginStart="4dp"
-            android:layout_marginEnd="4dp"
-            android:gravity="center"
-            android:text="0000000"
-            android:textSize="12dp"/>
+
+            <TextView
+                android:id="@+id/id_activation"
+                android:layout_width="36dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+
+                android:layout_marginEnd="4dp"
+                android:gravity="center"
+                android:text="0000000"
+                android:textSize="8dp" />
 
         <ImageView
             android:id="@+id/name_services_a"
@@ -99,7 +97,7 @@
             android:layout_marginStart="4dp"
             android:src="@drawable/ru_flag"
             android:layout_marginEnd="4dp"
-            android:layout_weight="1"
+
             android:gravity="center" />
 
         <ImageView
@@ -109,7 +107,6 @@
             android:layout_marginStart="4dp"
             android:layout_marginEnd="4dp"
             android:src="@drawable/ru_flag"
-            android:layout_weight="1"
             android:gravity="center" />
 
         <TextView
@@ -121,7 +118,7 @@
             android:gravity="center"
             android:layout_weight="1"
             android:text="8999999999"
-            android:textSize="12dp" />
+            android:textSize="8dp" />
 
 
         <TextView
@@ -132,16 +129,23 @@
             android:layout_marginEnd="4dp"
             android:gravity="center"
             android:layout_weight="1"
+            android:clickable="true"
             android:text="0000"
-            android:textSize="12dp" />
+            android:textSize="8dp"
+            android:focusable="true" />
 
-        <CheckBox
-            android:id="@+id/buy_services"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:layout_marginEnd="4dp" />
+            <ImageButton
+                android:id="@+id/cancel_button"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:background="@drawable/round_style"
+                android:src="@drawable/ic_cancel" />
+
+
         </TableRow>
+
     </TableLayout>
 
 

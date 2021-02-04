@@ -11,6 +11,6 @@ class Data {
 
     data class AccountBalance(val balance: @NotNull BigDecimal)
 
-    data class NumberPhone(val activation: Int, val numberPhone: Long, val service:String)
+    data class NumberPhone(val activation: Int=0, val numberPhone: Long=0, val service:String="")
 
 }

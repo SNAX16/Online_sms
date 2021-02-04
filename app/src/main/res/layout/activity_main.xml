@@ -9,7 +9,7 @@
    <EditText
        android:id="@+id/api_key_edit"
        android:layout_width="match_parent"
-       android:layout_height="50dp"
+       android:layout_height="wrap_content"
        android:gravity="center"
        android:hint="Api key"
        android:textColor="@color/colorBackground"
@@ -18,7 +18,9 @@
        app:layout_constraintTop_toTopOf="parent"
        android:layout_marginStart="20dp"
        android:layout_marginEnd="60dp"
-      />
+       android:inputType="text"
+       android:maxLength="32"
+       android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789"/>
    <ImageButton
        android:id="@+id/api_key_browser"
        android:layout_width="50dp"
@@ -34,7 +36,7 @@
        android:layout_width="200dp"
        android:layout_height="50dp"
        android:background="@drawable/round_style"
-       android:text="Enter"
+       android:text="Войти"
        android:textColor="@color/colorWhite"
        app:layout_constraintEnd_toEndOf="parent"
        android:layout_marginTop="60dp"

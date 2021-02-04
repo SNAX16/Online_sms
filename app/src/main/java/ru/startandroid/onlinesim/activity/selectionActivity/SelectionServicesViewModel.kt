@@ -11,7 +11,7 @@ import ru.startandroid.onlinesim.data.Data
 import java.util.*
 
 class SelectionServicesViewModel() : ViewModel() {
-    val apiAdapter = ApiAdapter(User.apyKey)
+    private val apiAdapter = ApiAdapter(User.apyKey)
     val liveDataPrice = MutableLiveData<ArrayList<Data.ServicePrices>>()
     val liveDataCountry = MutableLiveData<MutableList<String>>()
 
@@ -27,7 +27,8 @@ class SelectionServicesViewModel() : ViewModel() {
 
     fun getPrice(idCountry: Int) {
         GlobalScope.launch(Dispatchers.IO) {
-            liveDataPrice.postValue(apiAdapter.getServicePrices(idCountry))
+            val price= apiAdapter.getServicePrices(idCountry)
+            liveDataPrice.postValue(price)
         }
 
     }
