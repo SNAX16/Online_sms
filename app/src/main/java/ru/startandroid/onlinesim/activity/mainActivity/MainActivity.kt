@@ -1,8 +1,11 @@
 package ru.startandroid.onlinesim.activity.mainActivity
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
+import android.text.Editable
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -14,10 +17,14 @@ import ru.startandroid.onlinesim.activity.selectionActivity.SelectionServices
 import ru.startandroid.onlinesim.auth.User
 
 class MainActivity : AppCompatActivity() {
+    private lateinit var sharedPreference: SharedPreferences
     lateinit var mainViewModel: MainActivityViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        sharedPreference =  getSharedPreferences("API_KEY",Context.MODE_PRIVATE)
+        val api = sharedPreference.getString("apiKey","")
+        api_key_edit.setText(api)
     }
 
     override fun onStart() {
@@ -30,13 +37,11 @@ class MainActivity : AppCompatActivity() {
 
         key_enter.setOnClickListener {
             if (api_key_edit.text.length == 32) {
-                User.apyKey = api_key_edit.text.toString()
-                User.isAuthorized = true
-
-                 val intent = Intent(this, SelectionServices::class.java)
-                 startActivity(intent)
-                 finish()
-
+                  User.apyKey = api_key_edit.text.toString()
+                  User.isAuthorized = true
+                  val intent = Intent(this, SelectionServices::class.java)
+                  startActivity(intent)
+                  finish()
             } else {
                 Toast.makeText(this, "неверный Api ключ", Toast.LENGTH_SHORT).show()
             }
@@ -45,5 +50,9 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStop() {
         super.onStop()
+
+        val editor = sharedPreference.edit()
+        editor.putString("apiKey","${api_key_edit.text}")
+        editor.apply()
     }
 }

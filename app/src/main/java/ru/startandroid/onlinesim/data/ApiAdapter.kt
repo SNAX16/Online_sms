@@ -1,6 +1,9 @@
 package ru.startandroid.onlinesim.data
 
+import org.jetbrains.annotations.NotNull
 import ru.sms_activate.SMSActivateApi
+import ru.sms_activate.client_enums.SMSActivateClientStatus
+import ru.sms_activate.response.api_activation.SMSActivateSetStatusResponse
 import ru.sms_activate.response.api_activation.enums.SMSActivateGetStatusActivation
 import ru.sms_activate.response.api_activation.extra.SMSActivateCountryInfo
 import java.util.ArrayList
@@ -8,7 +11,7 @@ import java.util.ArrayList
 class ApiAdapter(apiKey: String) : SMSActivateApi(apiKey) {
     private val listCountry: ArrayList<String> = ArrayList()
 
-    fun getCountry(): ArrayList<String> {
+    suspend  fun getCountry(): ArrayList<String> {
         val country: MutableList<SMSActivateCountryInfo> = countries.smsActivateGetCountryInfoList
 
         country.forEach {
@@ -17,7 +20,7 @@ class ApiAdapter(apiKey: String) : SMSActivateApi(apiKey) {
         return listCountry
     }
 
-    fun getServicePrices(idCountry: Int): ArrayList<Data.ServicePrices> {
+    suspend  fun getServicePrices(idCountry: Int): ArrayList<Data.ServicePrices> {
         val servicePrices= allPrices.getSmsActivateGetPriceMap(idCountry)
         val listServicePrices: ArrayList<Data.ServicePrices> = ArrayList()
        servicePrices.forEach {
@@ -33,18 +36,18 @@ class ApiAdapter(apiKey: String) : SMSActivateApi(apiKey) {
     }
 
 
-    fun getNumberPhone(idCountry: Int,nameService:String): Data.NumberPhone {
+ fun getNumberPhone(idCountry: Int,nameService:String): Data.NumberPhone {
         val numberPhone = getNumber(idCountry,nameService)
-
         return  Data.NumberPhone(numberPhone.id,numberPhone.number,numberPhone.shortName)
     }
 
-    fun getStatusActivation( activationId:Int): String {
+    suspend fun getStatusActivation( activationId:Int): String {
         var statusActivation:String= ""
         val status = getStatus(activationId)
         if (status.smsActivateGetStatus == SMSActivateGetStatusActivation.OK){
             statusActivation = status.codeFromSMS.toString()
         }
+
         if (status.smsActivateGetStatus == SMSActivateGetStatusActivation.WAIT_CODE){
             statusActivation = "Ожидайте"
         }
@@ -54,18 +57,11 @@ class ApiAdapter(apiKey: String) : SMSActivateApi(apiKey) {
         return statusActivation
     }
 
-    fun getStatusIdActivation( activationId:Int): Int? {
-        var statusActivation:Int? =null
-        val status = getStatus(activationId)
-        if (status.smsActivateGetStatus == SMSActivateGetStatusActivation.OK){
-            statusActivation = 2
-        }
-        if (status.smsActivateGetStatus == SMSActivateGetStatusActivation.WAIT_CODE){
-            statusActivation = 1
-        }
-        if (status.smsActivateGetStatus == SMSActivateGetStatusActivation.CANCEL){
-            statusActivation = 0
-        }
-        return statusActivation
+    fun getStatusIdActivation( activationId:Int): @NotNull SMSActivateGetStatusActivation {
+        return getStatus(activationId).smsActivateGetStatus
+    }
+
+    suspend fun sSetStatus(activationId: Int, status: SMSActivateClientStatus): @NotNull SMSActivateSetStatusResponse {
+        return setStatus(activationId,status)
     }
 }

@@ -9,6 +9,8 @@ import ru.startandroid.onlinesim.auth.User
 import ru.startandroid.onlinesim.data.ApiAdapter
 import ru.startandroid.onlinesim.data.Data
 import java.util.*
+import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
 
 class SelectionServicesViewModel() : ViewModel() {
     private val apiAdapter = ApiAdapter(User.apyKey)
@@ -22,8 +24,8 @@ class SelectionServicesViewModel() : ViewModel() {
     private fun onStart() {
         getCountry()
         getPrice(0)
-
     }
+
 
     fun getPrice(idCountry: Int) {
         GlobalScope.launch(Dispatchers.IO) {

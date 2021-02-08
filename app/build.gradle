@@ -93,7 +93,6 @@ dependencies {
     implementation "androidx.room:room-rxjava2:$version_room"
     kapt "androidx.room:room-compiler:$version_room"
 
-
     implementation 'com.google.android.material:material:1.0.0-alpha1'
 
 

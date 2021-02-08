@@ -23,13 +23,9 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
     fun onStart() {
     }
 
-    fun getBalance(): Data.AccountBalance? {
-        var balance:Data.AccountBalance? = null
-        GlobalScope.launch(Dispatchers.IO) {
-            val apiAdapter = ApiAdapter(User.apyKey)
-            balance = apiAdapter.getAccountBalance()
-        }
-        return balance
+    fun setApi(api:String)  {
+        val apiAdapter =ApiAdapter(api)
+        apiAdapter.getAccountBalance()
     }
 }
 

@@ -2,7 +2,6 @@ package ru.startandroid.onlinesim.activity.selectionActivity
 
 import android.app.AlertDialog
 import android.content.Context
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,8 +9,11 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.lifecycle.MutableLiveData
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import io.reactivex.internal.util.ExceptionHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -22,15 +24,14 @@ import ru.startandroid.onlinesim.data.Data
 import ru.startandroid.onlinesim.model.database.DataBaseHelperImpl
 import ru.startandroid.onlinesim.model.database.DatabaseBuilder
 import ru.startandroid.onlinesim.model.entity.LiveActivations
+import ru.startandroid.onlinesim.utilits.DiffUtilCallbackServicePrices
+import java.util.ArrayList
 
 
-class SelectionAdapter(
-    val selection: List<Data.ServicePrices>,
-    val context: Context,
-    val idCountry: Int,
-    val ssViewModel: SelectionServicesViewModel
-) : RecyclerView.Adapter<SelectionAdapter.ViewHolder>() {
-    private var spinnerPosition: Int = 0
+private lateinit var mDiffResult:DiffUtil.DiffResult
+var selection: List<Data.ServicePrices> = emptyList()
+class SelectionAdapter(val context: Context, val idCountry: Int) : RecyclerView.Adapter<SelectionAdapter.ViewHolder>() {
+   lateinit var liveDataSost:String
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view: View =
             LayoutInflater.from(parent.context).inflate(R.layout.services_layout, parent, false)
@@ -51,9 +52,9 @@ class SelectionAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         Glide
             .with(context)
-            .load("https://sms-activate.ru/assets/ico/${selection[position].Id}0.png")
+            .load("https://sms-activate.ru/assets/ico/${selection[position].id}0.png")
             .into(holder.icon)
-        holder.servicesText.text = selection[position].Id ?: "Vk"
+        holder.servicesText.text = selection[position].id ?: "Vk"
         holder.countNumberText.text = selection[position].price.toString() ?: "000"
         holder.priceServicesText.text = selection[position].count.toString() + "Р" ?: "000"
 
@@ -63,8 +64,10 @@ class SelectionAdapter(
             .setTitle("Покупка")
             .setMessage("Вы уверены, что хотите приобрести номер?")
             .setPositiveButton("Подтвердить") { _, _ ->
-                saveData(idCountry, selection[position].Id)
-                Toast.makeText(context, "Номер добавлен", Toast.LENGTH_SHORT).show()
+                    saveData(idCountry, selection[position].id)
+
+                    Toast.makeText(context, "Номер добавлен", Toast.LENGTH_SHORT).show()
+
             }
 
             .setNegativeButton("Отменить"){ dialog, id ->  dialog.cancel() }
@@ -74,19 +77,23 @@ class SelectionAdapter(
         }
     }
 
-    private fun startActivity(intent: Intent) {
-        context.startActivity(intent, null)
+    fun saveData(idCountry: Int, service: String) {
+            GlobalScope.launch(Dispatchers.IO) {
+                val apiAdapter = ApiAdapter(User.apyKey)
+                val db = DataBaseHelperImpl(DatabaseBuilder.getInstance(context))
+              try{
+                val numberPhone = apiAdapter.getNumber(idCountry, service)
+
+                db.addLiveActivations(LiveActivations(numberPhone.id, service, idCountry,numberPhone.number))
+              }catch (ex:Exception){
+                  //добавить обработку
+              }
+            }
     }
 
-
-    fun saveData( idCountry: Int,service: String) {
-        GlobalScope.launch(Dispatchers.IO) {
-            val apiAdapter = ApiAdapter(User.apyKey)
-            val numberPhone   = apiAdapter.getNumber(idCountry, service)
-            val db = DataBaseHelperImpl(DatabaseBuilder.getInstance(context))
-            db.addLiveActivations(LiveActivations(numberPhone.id, service,idCountry, numberPhone.number)
-            )
-        }
+    fun updateData(newList:List<Data.ServicePrices>){
+        mDiffResult = DiffUtil.calculateDiff(DiffUtilCallbackServicePrices(selection,newList))
+        mDiffResult.dispatchUpdatesTo(this)
+        selection = newList
     }
-
 }

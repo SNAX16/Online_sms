@@ -7,7 +7,7 @@ class Data {
 
     data class Country(val Id:Int, val Name:String)
 
-    data class ServicePrices(val Id: String, val count: @NotNull BigDecimal, val price: Int)
+    data class ServicePrices( val id: String, val count: @NotNull BigDecimal, val price: Int)
 
     data class AccountBalance(val balance: @NotNull BigDecimal)
 
