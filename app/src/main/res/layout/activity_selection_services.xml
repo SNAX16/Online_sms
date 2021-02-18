@@ -52,9 +52,39 @@
                 android:layout_weight="1"
                 android:layout_marginEnd="5dp"
                 android:layout_marginStart="5dp" />
-            <TextView
+
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="50dp"
-                android:layout_height="50dp"/>
+                android:layout_height="50dp">
+
+                <ImageView
+                    android:id="@+id/shopping_cart"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:background="@drawable/round_style"
+                    android:src="@drawable/ic_cart"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+
+
+                <TextView
+                    android:id="@+id/counter_buy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="0"
+                    android:textStyle="bold"
+                    android:textColor="@color/colorWhite"
+                    app:layout_constraintEnd_toEndOf="@+id/shopping_cart"
+                    app:layout_constraintTop_toTopOf="@+id/shopping_cart"
+                    app:layout_constraintStart_toStartOf="@+id/shopping_cart"
+                    android:layout_marginTop="8dp" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
             <ImageButton
                 android:id="@+id/live_button"

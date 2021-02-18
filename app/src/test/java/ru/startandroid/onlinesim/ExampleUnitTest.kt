@@ -24,13 +24,10 @@ class ExampleUnitTest {
 
     @Test
     fun one() {
-      val setStatus = SMSActivateApi("6863f0555d45c62d137A8b6e3c19d64f")
-//        //setStatus.setStatus(387828131, SMSActivateClientStatus.MESSAGE_WAS_SENT)
-//      //  setStatus.setStatus(387829529, SMSActivateClientStatus.FINISH)
-//        val put =setStatus.getStatus(387829529)
-        val servicePrices= setStatus.getStatus(387870217)
+      val setStatus = SMSActivateApi("4f467be259d6f64842dbdA471228e2bc")
+      val put=  setStatus.countries.smsActivateGetCountryInfoList
 
-        println(servicePrices.smsActivateGetStatus)
+        println(put)
     }
 
 }

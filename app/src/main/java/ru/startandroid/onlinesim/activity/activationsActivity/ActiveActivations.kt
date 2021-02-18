@@ -22,7 +22,7 @@ class ActiveActivations : AppCompatActivity() {
         setContentView(R.layout.activity_active_activations)
         aaViewModel = ViewModelProvider(this).get(ActiveActivationsViewModel::class.java)
         recyclerView_a_a.layoutManager = LinearLayoutManager(this)
-        var adapter = ActivationsAdapter(this, aaViewModel)
+        val adapter = ActivationsAdapter(this, aaViewModel)
         recyclerView_a_a.adapter = adapter
 
         val itemTouchHelper =ItemTouchHelper(SwipeToDelete(adapter ))

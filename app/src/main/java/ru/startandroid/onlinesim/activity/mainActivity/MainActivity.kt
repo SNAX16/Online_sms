@@ -10,6 +10,9 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import ru.sms_activate.error.wrong_parameter.SMSActivateWrongParameter
 import ru.sms_activate.error.wrong_parameter.SMSActivateWrongParameter.*
 import ru.startandroid.onlinesim.R
@@ -37,11 +40,24 @@ class MainActivity : AppCompatActivity() {
 
         key_enter.setOnClickListener {
             if (api_key_edit.text.length == 32) {
-                  User.apyKey = api_key_edit.text.toString()
-                  User.isAuthorized = true
-                  val intent = Intent(this, SelectionServices::class.java)
-                  startActivity(intent)
-                  finish()
+                CoroutineScope(Dispatchers.IO).launch {
+                    try {
+
+                        mainViewModel.setApi(api_key_edit.text.toString())
+
+                        launch(Dispatchers.Main) {
+                            User.apyKey = api_key_edit.text.toString()
+                            User.isAuthorized = true
+                            val intent = Intent(this@MainActivity, SelectionServices::class.java)
+                            startActivity(intent)
+                            finish()
+                        }
+                    } catch (ex: Exception) {
+                        launch(Dispatchers.Main) {
+                            Toast.makeText(this@MainActivity, "неверный Api ключ", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
             } else {
                 Toast.makeText(this, "неверный Api ключ", Toast.LENGTH_SHORT).show()
             }

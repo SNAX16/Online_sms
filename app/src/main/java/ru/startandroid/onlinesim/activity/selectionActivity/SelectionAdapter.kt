@@ -9,14 +9,10 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import io.reactivex.internal.util.ExceptionHelper
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import ru.startandroid.onlinesim.R
 import ru.startandroid.onlinesim.auth.User
 import ru.startandroid.onlinesim.data.ApiAdapter
@@ -25,13 +21,10 @@ import ru.startandroid.onlinesim.model.database.DataBaseHelperImpl
 import ru.startandroid.onlinesim.model.database.DatabaseBuilder
 import ru.startandroid.onlinesim.model.entity.LiveActivations
 import ru.startandroid.onlinesim.utilits.DiffUtilCallbackServicePrices
-import java.util.ArrayList
-
 
 private lateinit var mDiffResult:DiffUtil.DiffResult
 var selection: List<Data.ServicePrices> = emptyList()
-class SelectionAdapter(val context: Context, val idCountry: Int) : RecyclerView.Adapter<SelectionAdapter.ViewHolder>() {
-   lateinit var liveDataSost:String
+class SelectionAdapter(val context: Context, var idCountry: Int, val ssViewModel: SelectionServicesViewModel) : RecyclerView.Adapter<SelectionAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view: View =
             LayoutInflater.from(parent.context).inflate(R.layout.services_layout, parent, false)
@@ -64,10 +57,7 @@ class SelectionAdapter(val context: Context, val idCountry: Int) : RecyclerView.
             .setTitle("Покупка")
             .setMessage("Вы уверены, что хотите приобрести номер?")
             .setPositiveButton("Подтвердить") { _, _ ->
-                    saveData(idCountry, selection[position].id)
-
-                    Toast.makeText(context, "Номер добавлен", Toast.LENGTH_SHORT).show()
-
+                saveData(idCountry, selection[position].id)
             }
 
             .setNegativeButton("Отменить"){ dialog, id ->  dialog.cancel() }
@@ -78,22 +68,29 @@ class SelectionAdapter(val context: Context, val idCountry: Int) : RecyclerView.
     }
 
     fun saveData(idCountry: Int, service: String) {
-            GlobalScope.launch(Dispatchers.IO) {
+            CoroutineScope(Dispatchers.IO).launch {
                 val apiAdapter = ApiAdapter(User.apyKey)
                 val db = DataBaseHelperImpl(DatabaseBuilder.getInstance(context))
-              try{
-                val numberPhone = apiAdapter.getNumber(idCountry, service)
-
-                db.addLiveActivations(LiveActivations(numberPhone.id, service, idCountry,numberPhone.number))
-              }catch (ex:Exception){
-                  //добавить обработку
-              }
+                try {
+                    val numberPhone = apiAdapter.getNumber(idCountry, service)
+                    db.addLiveActivations(LiveActivations(numberPhone.id, service, idCountry, numberPhone.number))
+                    launch(Dispatchers.Main) {
+                        Toast.makeText(context, "Номер добавлен", Toast.LENGTH_SHORT).show()
+                        ssViewModel.setCounterBuy()
+                    }
+                } catch (ex: Exception) {
+                    launch(Dispatchers.Main) {
+                        Toast.makeText(context, "Ошибка получения номера", Toast.LENGTH_SHORT).show()
+                    }
+                }
             }
+
     }
 
-    fun updateData(newList:List<Data.ServicePrices>){
+    fun updateData(newList:List<Data.ServicePrices>, id:Int){
         mDiffResult = DiffUtil.calculateDiff(DiffUtilCallbackServicePrices(selection,newList))
         mDiffResult.dispatchUpdatesTo(this)
         selection = newList
+        idCountry = id
     }
 }

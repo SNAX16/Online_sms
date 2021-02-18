@@ -31,7 +31,7 @@ import kotlin.concurrent.schedule
 class ActiveActivationsViewModel(application: Application) : AndroidViewModel(application) {
     private val apiAdapter = ApiAdapter(User.apyKey)
     val liveDataBalance = MutableLiveData<Data.AccountBalance>()
-    val liveDataLiveActivations = MutableLiveData<List<LiveActivations>>()
+    val liveDataLiveActivations = MutableLiveData<ArrayList<LiveActivations>>()
     val app = application
     private val db = DataBaseHelperImpl(DatabaseBuilder.getInstance(app.applicationContext))
 
@@ -42,7 +42,7 @@ class ActiveActivationsViewModel(application: Application) : AndroidViewModel(ap
     fun onStart() {
         getBalance()
         Executors.newSingleThreadScheduledExecutor()
-            .scheduleAtFixedRate(Runnable { getStatusActivation() }, 0, 5, TimeUnit.SECONDS)
+           .scheduleAtFixedRate(Runnable { getStatusActivation() }, 0, 5, TimeUnit.SECONDS)
     }
 
     fun getBalance() {
@@ -64,20 +64,6 @@ class ActiveActivationsViewModel(application: Application) : AndroidViewModel(ap
             liveDataLiveActivations.postValue(liveActivations)
         }
     }
-//
-//    fun setStatusFinish(activationId: Int): @NotNull SMSActivateServerStatus {
-//            val setStatus = SMSActivateApi(User.apyKey)
-//            val response = setStatus.setStatus(activationId, SMSActivateClientStatus.FINISH)
-//            response.smsActivateAccessStatus
-//    }
-
-    suspend fun setStatusCancel(activationId: Int) {
-
-        val setStatus = ApiAdapter(User.apyKey)
-        val response = setStatus.sSetStatus(activationId, SMSActivateClientStatus.CANCEL)
-        response.smsActivateAccessStatus
-
-    }
 
     fun deleteLiveActivations(activations: LiveActivations) {
         GlobalScope.launch(Dispatchers.IO) {
@@ -85,7 +71,7 @@ class ActiveActivationsViewModel(application: Application) : AndroidViewModel(ap
         }
     }
 
-    suspend fun setStatusCancel1(activationId: Int): @NotNull String {
+    suspend fun setStatusCancel(activationId: Int): @NotNull String {
         val job = GlobalScope.async(Dispatchers.IO) {
             val setStatus = ApiAdapter(User.apyKey)
             val response = setStatus.sSetStatus(activationId, SMSActivateClientStatus.CANCEL)
@@ -94,7 +80,7 @@ class ActiveActivationsViewModel(application: Application) : AndroidViewModel(ap
         return job.await().smsActivateAccessStatus.russianMessage
     }
 
-    suspend fun setStatusFinish1(activationId: Int): @NotNull String {
+    suspend fun setStatusFinish(activationId: Int): @NotNull String {
         val job = GlobalScope.async(Dispatchers.IO) {
             val setStatus = ApiAdapter(User.apyKey)
             val response = setStatus.setStatus(activationId, SMSActivateClientStatus.FINISH)

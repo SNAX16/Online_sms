@@ -26,11 +26,8 @@ import ru.startandroid.onlinesim.model.entity.LiveActivations
 import ru.startandroid.onlinesim.utilits.DiffUtilCallbackLiveActivation
 
 private lateinit var mDiffResult: DiffUtil.DiffResult
-var selection: List<LiveActivations> = emptyList()
-
-class ActivationsAdapter(
-    private val context: Context,
-    private val aaViewModel: ActiveActivationsViewModel
+var selection: ArrayList<LiveActivations> = ArrayList()
+class ActivationsAdapter(private val context: Context, private val aaViewModel: ActiveActivationsViewModel
 ) : RecyclerView.Adapter<ActivationsAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view: View = LayoutInflater.from(parent.context)
@@ -71,7 +68,7 @@ class ActivationsAdapter(
                     CoroutineScope(Dispatchers.Main).async {
                         val jobStatus =  aaViewModel.getStatus(selection[position].liveActivations_id)
                         if (jobStatus == SMSActivateGetStatusActivation.OK) {
-                            val job = aaViewModel.setStatusFinish1(selection[position].liveActivations_id)
+                            val job = aaViewModel.setStatusFinish(selection[position].liveActivations_id)
                             Toast.makeText(context, job, Toast.LENGTH_SHORT).show()
                            // aaViewModel.deleteLiveActivations(selection[position])
                          //   notifyItemRemoved(position)
@@ -97,11 +94,14 @@ class ActivationsAdapter(
                         if (jobStatus == SMSActivateGetStatusActivation.OK) {
                             Toast.makeText(context, "Отмена не удалась ", Toast.LENGTH_SHORT).show()
                         } else{
-                            val job = aaViewModel.setStatusCancel1(selection[position].liveActivations_id)
-                            Toast.makeText(context, job, Toast.LENGTH_SHORT).show()
                             aaViewModel.deleteLiveActivations(selection[position])
                             notifyItemRemoved(position)
+
+                            val job = aaViewModel.setStatusCancel(selection[position].liveActivations_id)
                             aaViewModel.getBalance()
+                            aaViewModel.getStatusActivation()
+
+                            Toast.makeText(context, job, Toast.LENGTH_SHORT).show()
                         }
                     }
                 }
@@ -129,7 +129,7 @@ class ActivationsAdapter(
         }
     }
 
-    fun setList(newSelection: List<LiveActivations>) {
+    fun setList(newSelection: ArrayList<LiveActivations>) {
         mDiffResult =
             DiffUtil.calculateDiff(DiffUtilCallbackLiveActivation(selection, newSelection))
         selection = newSelection
@@ -138,13 +138,16 @@ class ActivationsAdapter(
     }
 
     fun deleteItem(positionItems:Int){
-        CoroutineScope(Dispatchers.Main).async {
+        CoroutineScope(Dispatchers.Main).launch {
             val jobStatus =  aaViewModel.getStatus(selection[positionItems].liveActivations_id)
             if (jobStatus == SMSActivateGetStatusActivation.OK||jobStatus == SMSActivateGetStatusActivation.CANCEL) {
                 aaViewModel.deleteLiveActivations(selection[positionItems])
                 notifyItemRemoved(positionItems)
+
+                aaViewModel.getStatusActivation()
             } else{
                 Toast.makeText(context, "${jobStatus.russianMessage}", Toast.LENGTH_SHORT).show()
+                aaViewModel.getStatusActivation()
             }
         }
     }
